@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2019 at 08:04 PM
+-- Generation Time: Jun 17, 2019 at 10:46 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -295,9 +295,18 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL COMMENT 'User email',
   `password` varchar(255) NOT NULL COMMENT 'Hashed user password',
   `fdotw` enum('1','2','3','4','5','6','7') NOT NULL COMMENT 'Fisrt day of the user week  1 = sunday',
-  `active` enum('Y','N') NOT NULL,
-  `login_attempts` int(1) NOT NULL DEFAULT '0'
+  `fk_cid` int(11) NOT NULL,
+  `active` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `login_attempts` int(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `fdotw`, `fk_cid`, `active`, `login_attempts`, `created_at`) VALUES
+(1, 'Nasser', 'nasser@gmail.com', '$2y$10$SN5bWDlgcjIQjmtVsmcnM.xfXPUbZ.v5opAC1NwKIXgUfotqC2KyG', '1', 187, 'Y', 0, '2019-06-17 20:37:08');
 
 --
 -- Indexes for dumped tables
@@ -314,7 +323,8 @@ ALTER TABLE `countries`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `foreign_key` (`fk_cid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -330,7 +340,17 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'user id ';
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'user id ', AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `foreign_key` FOREIGN KEY (`fk_cid`) REFERENCES `countries` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
